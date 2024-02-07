@@ -3,6 +3,57 @@ const Property = require('../models/propertyDetail');
 const router = express.Router();
 
 
+router.get('/home/:location', async(req, res) => {
+    try {
+     //   const locationStr = req.params.location.trim().toLowerCase();
+
+        const locationStr = req.params.location
+     
+
+        const parts = locationStr.split('-');
+        const locationCity = parts[2];
+
+     
+        const filterparamters = req.query
+        const { adult, child, type, is_pax_selected, city, state } = filterparamters;
+
+       console.log('Ramji Bala kare : ',locationCity);
+        const propertiesCity =await Property.find({
+            'location.city':locationCity
+        })
+
+        
+         
+        const FilterCity = propertiesCity.map((curr) => ({
+            title:curr.slug,
+            price:curr.price,
+            photos:curr.images.gallery,
+            locationField: curr.loctionField,
+            state: curr.location.state,
+            country: curr.location.country,
+            city: curr.location.city
+        }));
+
+        console.log('Balaji Dekh lo ',FilterCity);
+        let finalData = [];
+       
+
+        return res.status(200).json({
+            success: true,
+            properties: FilterCity
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            msg: 'Error loction Filter  x x x'
+        });
+        console.log('Error loction Filter x x x', err);
+    }
+
+})
+
+
 router.get('/loction-filter', (req, res) => {
     try {
 
@@ -31,18 +82,18 @@ router.get('/auto-filter/:substr', async (req, res) => {
 
 
         function correctSpelling(userInput) {
-            userInput = userInput.toLowerCase(); 
+            userInput = userInput.toLowerCase();
             const inputWords = userInput.split(' ');
-        
+
             // Correct each word in the input
             const correctedWords = inputWords.map(word => {
                 const isCorrect = dictionary.check(word);
                 return isCorrect ? word : dictionary.suggest(word)[0];
             });
-        
+
             return correctedWords.join(' ');
         }
-        
+
         // Example usage
         const userInput = "favouriite colur";
         const correctedInput = 'ok'//correctSpelling(userInput);
@@ -51,7 +102,7 @@ router.get('/auto-filter/:substr', async (req, res) => {
 
         const suggestions = await Property.find({ loctionField: { $regex: new RegExp(`\\b${substrData}`, 'i') } }).limit(10);
         // const locationValues = suggestions.map((property) => property.loctionField);
-        
+
 
         const locationValues = suggestions.map((property) => ({
             locationField: property.loctionField,
@@ -62,7 +113,7 @@ router.get('/auto-filter/:substr', async (req, res) => {
 
 
 
-       // console.log('Balaji Bala kare mera', suggestions);
+        // console.log('Balaji Bala kare mera', suggestions);
         res.status(200).json({
             success: true,
             data: locationValues
@@ -82,7 +133,7 @@ router.get('/filter-1', async (req, res) => {
 
     try {
         const res = await Property.find()
-        
+
     }
     catch (err) {
         res.status(500).json({
