@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const urldb=`mongodb://127.0.0.1:27017/demo-v1`;
+const urldb=`mongodb://127.0.0.1:27017/demo-v2`;
 
 
 const connectDb = async() =>{

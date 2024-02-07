@@ -14,12 +14,12 @@ router.post('/property/add', async (req, res) => {
 
         const newProperty = await Property.create(propertyData);
 
-        newProperty.loctionField =  + propertyData.location.country + " " + propertyData.location.state +" " + propertyData.location.city+" " + propertyData.location.taluka+" "+propertyData.propertyTitle;
+        newProperty.loctionField = + propertyData.location.country + " " + propertyData.location.state + " " + propertyData.location.city + " " + propertyData.location.taluka + " " + propertyData.propertyTitle;
 
         await newProperty.save();
 
 
-
+        console.log('add property SuccessFully ....')
 
         res.status(200).json({
             success: true,

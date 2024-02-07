@@ -15,32 +15,71 @@ router.get('/home/:location', async(req, res) => {
 
      
         const filterparamters = req.query
-        const { adult, child, type, is_pax_selected, city, state } = filterparamters;
+        const { adult, child, type, is_pax_selected, city, state,pets } = filterparamters;
+       
 
-       console.log('Ramji Bala kare : ',locationCity);
-        const propertiesCity =await Property.find({
-            'location.city':locationCity
-        })
-
+         
+        const query = {
+            'location.city': locationCity,
+            'numberofguest.numberofadults.max': { $gte: adult },
+            'numberofguest.numberofchilders.max':{$gte:child}
+        }
+     
+        if(pets==1){
+            query.pets=true
+        }
+        console.log('Balji aap hi sab kuch ho\n',query);
         
+
+        const propertiesCity = await Property.find(query);
          
         const FilterCity = propertiesCity.map((curr) => ({
-            title:curr.slug,
-            price:curr.price,
+            title:curr.propertyTitle,
+            price:curr.numberofguest.price,
             photos:curr.images.gallery,
             locationField: curr.loctionField,
             state: curr.location.state,
             country: curr.location.country,
-            city: curr.location.city
+            city: curr.location.city,
+            pets:curr.pets
         }));
 
-        console.log('Balaji Dekh lo ',FilterCity);
-        let finalData = [];
+
+
+          
+        const queryState = {
+            'location.city': { $ne: locationCity },
+            'location.state':state,
+            'numberofguest.numberofchilders.max':{$gte:child},
+            'numberofguest.numberofadults.max': { $gte: adult }
+        };
+     
+        if(pets==1){
+            queryState.pets=true
+        }
+    
+
+        const propertiesState = await Property.find(queryState);
+         
+
+        const FilterState = propertiesState.map((curr) => ({
+            title:curr.propertyTitle,
+            price:curr.numberofguest.price,
+            photos:curr.images.gallery,
+            locationField: curr.loctionField,
+            state: curr.location.state,
+            country: curr.location.country,
+            city: curr.location.city,
+            pets:curr.pets
+        }));
+
+        console.log('Balaji Dekh lo ',propertiesState);
+        let finalData = [...FilterCity,...FilterState];
        
 
         return res.status(200).json({
             success: true,
-            properties: FilterCity
+            properties: finalData
         })
 
     } catch (err) {
