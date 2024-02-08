@@ -16,6 +16,8 @@ router.get('/get-all',async (req, res) => {
             success: true,
             properties: properties
         })
+
+        
     }
 
     catch (err) {
