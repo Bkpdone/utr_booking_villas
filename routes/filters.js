@@ -1,7 +1,11 @@
 const express = require('express');
 const Property = require('../models/propertyDetail');
 const router = express.Router();
+const Typo = require('typo-js');
 
+// Load English (US) dictionary
+const dictionary = new Typo('en_US');
+//const spellchecker = require('spellchecker');
 
 router.get('/home/:location', async(req, res) => {
     try {
@@ -79,7 +83,8 @@ router.get('/home/:location', async(req, res) => {
 
         return res.status(200).json({
             success: true,
-            properties: finalData
+            properties: FilterCity,
+            
         })
 
     } catch (err) {
@@ -93,9 +98,23 @@ router.get('/home/:location', async(req, res) => {
 })
 
 
-router.get('/loction-filter', (req, res) => {
+router.get('/loction-filter', async(req, res) => {
     try {
+             
+        
+           const filterObj = req.body;
+        // console.log(obj);
+        const query ={
+            'location.city': locationCity,
+        }
+          const properties = await Property.find(query);
 
+          
+          return res.status(200).json({
+            
+          })
+
+        
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -120,23 +139,39 @@ router.get('/auto-filter/:substr', async (req, res) => {
 
 
 
-        function correctSpelling(userInput) {
-            userInput = userInput.toLowerCase();
-            const inputWords = userInput.split(' ');
+        // function correctSpelling(userInput) {
+        //     userInput = userInput.toLowerCase();
+        //     const inputWords = userInput.split(' ');
 
-            // Correct each word in the input
-            const correctedWords = inputWords.map(word => {
-                const isCorrect = dictionary.check(word);
-                return isCorrect ? word : dictionary.suggest(word)[0];
-            });
+        //     // Correct each word in the input
+        //     const correctedWords = inputWords.map(word => {
+        //         const isCorrect = dictionary.check(word);
+        //         return isCorrect ? word : dictionary.suggest(word)[0];
+        //     });
 
-            return correctedWords.join(' ');
-        }
+        //     return correctedWords.join(' ');
+        // }
 
-        // Example usage
-        const userInput = "favouriite colur";
-        const correctedInput = 'ok'//correctSpelling(userInput);
-        console.log(correctedInput);
+        // // Example usage
+        // const userInput = "favouriite colur";
+        // const correctedInput = 'ok'//correctSpelling(userInput);
+        // console.log(correctedInput);
+        // const correctedWord = spellchecker.correct(substrData);
+
+        // // Output the corrected word
+        // console.log("Balaji sab shi karate hai: ",correctedWord)
+
+
+          
+
+        const word = 'gao';
+        const correctedWord = dictionary.suggest(word)[0]; // Assuming you want the first suggestion
+        
+        // Output the corrected word
+        console.log("Balaji Sab shi krane ge hai :",correctedWord);
+
+
+
 
 
         const suggestions = await Property.find({ loctionField: { $regex: new RegExp(`\\b${substrData}`, 'i') } }).limit(10);
