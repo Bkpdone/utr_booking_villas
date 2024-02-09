@@ -19,7 +19,10 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/home', require('./routes/home'))
 
 //Filter =>
-app.use('/api/filters', require('./routes/filters'))
+app.use('/api/filters', require('./routes/filters'));
+
+//Comp
+app.use('/api/comp',require('./routes/comp'))
 
 
 

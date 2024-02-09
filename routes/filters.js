@@ -114,31 +114,37 @@ router.get('/loction-filter', async (req, res) => {
         const FilterCity = properties.map((curr) => ({
             title: curr.propertyTitle,
             price: curr.numberofguest.price,
+
+
             // photos: curr.images.gallery,
             // locationField: curr.loctionField,
+
+            
             state: curr.location.state,
             country: curr.location.country,
             city: curr.location.city,
             pets: curr.pets,
             nonVeg: curr.nonveg,
+            vegan:curr.purvegfood.vegan,
+            jain:curr.purvegfood.jain,
             wifiSpeed: true,
             pool: curr.propertyAttributes.pools
         }));
 
 
         let finalFilterData = FilterCity
-         
+
         //Filter For Sort Price
         if (filterObj.sortPrice.value) {
 
             //sort low to Hi
             if (filterObj.sortPrice.min_max) {
                 finalFilterData = finalFilterData.sort((a, b) => a.price - b.price);
-                console.log('Hi Data is sorted min--max...');
+                console.log('Hi Data is sorted min--max... SuccessFully...');
             }
             else {
                 finalFilterData = finalFilterData.sort((a, b) => b.price - a.price);;
-                console.log('Hi Data is sorted max--min...');
+                console.log('Hi Data is sorted max--min... SuccessFully...');
             }
 
             //sort High to low
@@ -158,6 +164,9 @@ router.get('/loction-filter', async (req, res) => {
 
             console.log('Hi your range data :', rangeFilterData);
             finalFilterData = rangeFilterData;
+
+            console.log("Range Data is Sorted SuccessFully...");
+            
         }
 
 
@@ -165,19 +174,84 @@ router.get('/loction-filter', async (req, res) => {
         if (filterObj.pureVeg.value) {
 
             let vegData = [];
-            for(let curr of finalFilterData){
-                if(curr.nonVeg===false){
+            for (let curr of finalFilterData) {
+                if (curr.nonVeg === false) {
                     vegData.push(curr);
                 }
             }
 
-            finalFilterData=vegData;
-            console.log('filter pure  veg');
+            finalFilterData = vegData;
+            console.log('filter pure-veg Food SuccessFully...');
+
+            if (filterObj.pureVeg.vegan) {
+
+
+                let veganData = [];
+
+                for (let curr of finalFilterData) {
+                    if (curr.vegan === true) {
+                        console.log('Ramji bhala kare bhavesh ka!!');
+                        veganData.push(curr);
+                    }
+                }
+                
+
+                finalFilterData=veganData;
+                console.log('Hi vegan Are Food Filter SuccessFully...');
+
+            }
+
+            
+            if (filterObj.pureVeg.jain) {
+
+
+                
+                let jainData = [];
+
+                for (let curr of finalFilterData) {
+                    if (curr.jain === true) {
+                        jainData.push(curr);
+                    }
+                }
+
+                finalFilterData=jainData;
+                console.log('Hi jain Food Are Filter SuccessFully...');
+
+            }
 
 
         }
 
-   
+        //filter pool
+        if (filterObj.pool) {
+
+            let poolData = [];
+            for (let curr of finalFilterData) {
+                if (curr.pool > 0) {
+                    poolData.push(curr);
+                }
+            }
+
+            finalFilterData = poolData;
+            console.log('filter pool data');
+        }
+
+
+        //fiter petsFriend
+        if (filterObj.petsFriendly) {
+
+            let petsFriend = [];
+            for (let curr of finalFilterData) {
+                if (curr.pets > 0) {
+                    petsFriend.push(curr);
+                }
+            }
+
+            finalFilterData = petsFriend;
+
+            console.log('filter petsFriendly data');
+        }
+
 
 
         return res.status(200).json({
