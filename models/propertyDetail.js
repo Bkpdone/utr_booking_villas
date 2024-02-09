@@ -35,8 +35,19 @@ const propertySchema = new mongoose.Schema({
                     pic: String,
                     dsc: [String],
                 },
+                {
+                    doubleBed: Number,
+                    pic: String,
+                    dsc: [String],
+                },
+                {
+                    largeBed: Number,
+                    pic: String,
+                    dsc: [String],
+                }
             ],
         },
+        totalCount:Number,
         bathRooms: Number,
         pools: Number,
     },

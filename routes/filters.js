@@ -40,7 +40,7 @@ router.get('/home/:location', async (req, res) => {
         const FilterCity = propertiesCity.map((curr) => ({
             title: curr.propertyTitle,
             price: curr.numberofguest.price,
-            photos: curr.images.gallery,
+           // photos: curr.images.gallery,
             locationField: curr.loctionField,
             state: curr.location.state,
             country: curr.location.country,
@@ -70,7 +70,7 @@ router.get('/home/:location', async (req, res) => {
         const FilterState = propertiesState.map((curr) => ({
             title: curr.propertyTitle,
             price: curr.numberofguest.price,
-            photos: curr.images.gallery,
+         //   photos: curr.images.gallery,
             locationField: curr.loctionField,
             state: curr.location.state,
             country: curr.location.country,
