@@ -112,12 +112,14 @@ router.get('/loction-filter', async (req, res) => {
         const properties = await Property.find(query);
 
         const FilterCity = properties.map((curr) => ({
+            id:curr._id,
             title: curr.propertyTitle,
             price: curr.numberofguest.price,
 
 
-            // photos: curr.images.gallery,
-            // locationField: curr.loctionField,
+            photos: curr.images.gallery,
+
+           locationField: curr.loctionField,
 
             
             state: curr.location.state,
